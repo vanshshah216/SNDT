@@ -1,45 +1,63 @@
 import { Navigation } from '@/components/navigation'
-import Link from 'next/link'
+import { createClient } from '@/lib/supabase/server'
+import type { TestimonialType } from '@/lib/dataStore'
 
-export default function AboutPage() {
-  const testimonials = [
-    {
-      name: 'Anjali Desai',
-      program: 'Bachelor of Arts',
-      company: 'Content Strategist at Tech Corp',
-      testimonial: 'My time at SNDT shaped me into an independent professional. The faculty and resources provided exceptional learning opportunities.'
-    },
-    {
-      name: 'Priya Sharma',
-      program: 'PhD in Computer Science',
-      company: 'Senior Researcher at Microsoft',
-      testimonial: 'SNDT has given me the confidence and knowledge to contribute to cutting-edge technology. The mentorship was truly transformative.'
-    },
-    {
-      name: 'Neha Patel',
-      program: 'MBA',
-      company: 'Founder & CEO',
-      testimonial: 'SNDT gave me the network and skills I needed to launch my startup. The supportive community was instrumental.'
-    },
-    {
-      name: 'Dr. Sneha Gupta',
-      program: 'Master of Science',
-      company: 'Doctor & Social Activist',
-      testimonial: 'The holistic education at SNDT instilled values of social responsibility and empathy alongside professional skills.'
-    },
-    {
-      name: 'Kavya Reddy',
-      program: 'Master of Science',
-      company: 'Research Scientist at IIT',
-      testimonial: 'The research opportunities here were invaluable. SNDT provides the perfect environment for intellectual growth and innovation.'
-    },
-    {
-      name: 'Vidya Iyer',
-      program: 'Bachelor of Commerce',
-      company: 'Financial Analyst at Goldman Sachs',
-      testimonial: 'SNDT equipped me with analytical and leadership skills that have been invaluable in my finance career.'
-    },
-  ]
+const FALLBACK_TESTIMONIALS: TestimonialType[] = [
+  {
+    name: 'Anjali Desai',
+    program: 'Bachelor of Arts',
+    company: 'Content Strategist at Tech Corp',
+    testimonial: 'My time at SNDT shaped me into an independent professional. The faculty and resources provided exceptional learning opportunities.'
+  },
+  {
+    name: 'Priya Sharma',
+    program: 'PhD in Computer Science',
+    company: 'Senior Researcher at Microsoft',
+    testimonial: 'SNDT has given me the confidence and knowledge to contribute to cutting-edge technology. The mentorship was truly transformative.'
+  },
+  {
+    name: 'Neha Patel',
+    program: 'MBA',
+    company: 'Founder & CEO',
+    testimonial: 'SNDT gave me the network and skills I needed to launch my startup. The supportive community was instrumental.'
+  },
+  {
+    name: 'Dr. Sneha Gupta',
+    program: 'Master of Science',
+    company: 'Doctor & Social Activist',
+    testimonial: 'The holistic education at SNDT instilled values of social responsibility and empathy alongside professional skills.'
+  },
+  {
+    name: 'Kavya Reddy',
+    program: 'Master of Science',
+    company: 'Research Scientist at IIT',
+    testimonial: 'The research opportunities here were invaluable. SNDT provides the perfect environment for intellectual growth and innovation.'
+  },
+  {
+    name: 'Vidya Iyer',
+    program: 'Bachelor of Commerce',
+    company: 'Financial Analyst at Goldman Sachs',
+    testimonial: 'SNDT equipped me with analytical and leadership skills that have been invaluable in my finance career.'
+  },
+]
+
+async function getTestimonials(): Promise<TestimonialType[]> {
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('testimonials')
+      .select('name, program, company, testimonial')
+      .order('sort_order', { ascending: true })
+
+    if (error || !data?.length) return FALLBACK_TESTIMONIALS
+    return data
+  } catch {
+    return FALLBACK_TESTIMONIALS
+  }
+}
+
+export default async function AboutPage() {
+  const testimonials = await getTestimonials()
   return (
     <>
       <Navigation />

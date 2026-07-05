@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "setup:testimonials": "node scripts/setup-testimonials.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

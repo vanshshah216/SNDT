@@ -64,7 +64,7 @@ export function Navigation() {
           {/* Auth Buttons */}
           <div className="flex items-center gap-2">
             <Link
-              href="/login"
+              href="/auth/login"
               className="hidden sm:block px-4 py-2 text-sm font-semibold text-primary bg-secondary hover:bg-yellow-400 rounded-md transition-all shadow-md hover:shadow-lg border border-yellow-300"
             >
               Admin Login
@@ -92,7 +92,7 @@ export function Navigation() {
               </Link>
             ))}
             <Link
-              href="/login"
+              href="/auth/login"
               className="block mx-4 mt-2 px-4 py-2 text-sm font-semibold text-primary bg-secondary hover:bg-yellow-400 rounded-md transition-all shadow-md border border-yellow-300 text-center"
               onClick={() => setIsOpen(false)}
             >

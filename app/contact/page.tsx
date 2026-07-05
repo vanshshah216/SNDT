@@ -2,7 +2,14 @@
 
 import { Navigation } from '@/components/navigation'
 import { useState } from 'react'
-import { Phone, Mail, MapPin, Clock } from 'lucide-react'
+import { Phone, Mail, MapPin, Clock, ExternalLink } from 'lucide-react'
+
+const COLLEGE_ADDRESS = "SNDT Women's University, Pune - 411001, Maharashtra, India"
+const MAPS_LAT = 18.5083
+const MAPS_LNG = 73.8564
+const MAPS_QUERY = encodeURIComponent(COLLEGE_ADDRESS)
+const MAPS_EMBED_URL = `https://www.google.com/maps?q=${MAPS_LAT},${MAPS_LNG}&hl=en&z=16&output=embed`
+const MAPS_LINK_URL = `https://www.google.com/maps/search/?api=1&query=${MAPS_QUERY}`
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -44,16 +51,10 @@ export default function ContactPage() {
 
       if (res.ok) {
         setSubmitMessage('Message sent successfully!')
-
-        setFormData({
-          fullName: '',
-          email: '',
-          phone: '',
-          subject: '',
-          message: ''
-        })
+        setFormData({ fullName: '', email: '', phone: '', subject: '', message: '' })
       } else {
-        setSubmitMessage('Failed to send message')
+        const data = await res.json().catch(() => ({}))
+        setSubmitMessage(data.error || 'Failed to send message')
       }
 
     } catch (error) {
@@ -86,10 +87,18 @@ export default function ContactPage() {
             <div className="md:col-span-1 space-y-6">
 
               <div className="flex gap-4">
-                <MapPin />
+                <MapPin className="flex-shrink-0 mt-1" />
                 <div>
                   <h3 className="font-bold">Address</h3>
-                  <p>SNDT Women's University<br/>Mumbai</p>
+                  <a
+                    href={MAPS_LINK_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline inline-flex items-center gap-1"
+                  >
+                    {COLLEGE_ADDRESS}
+                    <ExternalLink size={14} />
+                  </a>
                 </div>
               </div>
 
@@ -185,6 +194,35 @@ export default function ContactPage() {
 
             </form>
 
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-primary mb-2">Find Us on the Map</h2>
+            <p className="text-muted-foreground">{COLLEGE_ADDRESS}</p>
+          </div>
+          <div className="rounded-xl overflow-hidden shadow-lg border bg-white">
+            <iframe
+              title="SNDT Women's University location"
+              src={MAPS_EMBED_URL}
+              width="100%"
+              height="450"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allow="fullscreen"
+            />
+          </div>
+          <div className="mt-6 text-center">
+            <a href={MAPS_LINK_URL} target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition">
+              Open in Google Maps
+              <ExternalLink size={16} />
+            </a>
           </div>
         </div>
       </section>

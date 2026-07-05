@@ -52,6 +52,15 @@ export interface BookType {
   pdf_url: string
 }
 
+export interface TestimonialType {
+  id?: string
+  name: string
+  program: string
+  company: string
+  testimonial: string
+  sort_order?: number
+}
+
 /* ---------------- SYLLABUS TYPES ---------------- */
 
 export interface SubjectType {
@@ -147,6 +156,17 @@ export const DataStore = {
     return data || []
   },
 
+  getTestimonials: async (): Promise<TestimonialType[]> => {
+    const { data, error } = await supabase
+      .from("testimonials")
+      .select("id, name, program, company, testimonial, sort_order")
+      .order("sort_order", { ascending: true })
+
+    if (error) return []
+
+    return data || []
+  },
+
   getBooks: async (): Promise<BookType[]> => {
     const { data, error } = await supabase
       .from("books")
@@ -156,6 +176,24 @@ export const DataStore = {
     if (error) return []
 
     return data || []
+  },
+
+  getBooksPage: async (
+    page: number,
+    pageSize: number = 12,
+  ): Promise<{ books: BookType[]; total: number }> => {
+    const from = (page - 1) * pageSize
+    const to = from + pageSize - 1
+
+    const { data, error, count } = await supabase
+      .from("books")
+      .select("*", { count: "exact" })
+      .order("title")
+      .range(from, to)
+
+    if (error) return { books: [], total: 0 }
+
+    return { books: data || [], total: count || 0 }
   },
 
   /* ---------- SYLLABUS ---------- */

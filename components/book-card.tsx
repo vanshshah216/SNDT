@@ -17,7 +17,7 @@ export function BookCard({ id, title, author, thumbnail_url, onViewDetails }: Bo
       <div className="text-left group cursor-pointer h-full">
         <div className="relative mb-3 overflow-hidden rounded-lg shadow-md hover:shadow-xl transition h-48">
           <img
-            src={thumbnail_url || 'https://via.placeholder.com/150x225?text=No+Cover'}
+            src={thumbnail_url || '/placeholder.svg'}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-110 transition"
           />

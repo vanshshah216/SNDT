@@ -39,7 +39,7 @@ export default function Page() {
         },
       })
       if (error) throw error
-      router.push('/protected')
+      router.push('/admin')
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred')
     } finally {
@@ -66,7 +66,7 @@ export default function Page() {
           <div className="flex flex-col gap-6">
             <div className="text-center mb-4">
               <h3 className="text-3xl font-bold text-primary mb-2">Welcome Back</h3>
-              <p className="text-muted-foreground">Sign in to your student account</p>
+              <p className="text-muted-foreground">Sign in to the admin portal</p>
             </div>
 
             <Card>

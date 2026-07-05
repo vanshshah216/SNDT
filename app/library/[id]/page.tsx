@@ -19,6 +19,8 @@ export default function BookDetailPage() {
   const supabase = createClient()
 
   const [book, setBook] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [fetchError, setFetchError] = useState<string | null>(null)
   const [viewMode, setViewMode] = useState<'detail' | 'read'>('detail')
 
   // ✅ ZOOM STATE
@@ -29,16 +31,32 @@ export default function BookDetailPage() {
   }, [params])
 
   async function fetchBook(id: string) {
-    const { data } = await supabase
+    setLoading(true)
+    setFetchError(null)
+
+    if (!id) {
+      setBook(null)
+      setFetchError('Book not found')
+      setLoading(false)
+      return
+    }
+
+    const { data, error } = await supabase
       .from('books')
       .select('*')
-      .eq('id', Number(id))
+      .eq('id', id)
       .single()
 
-    setBook(data)
+    if (error || !data) {
+      setBook(null)
+      setFetchError('Book not found')
+    } else {
+      setBook(data)
+    }
+    setLoading(false)
   }
 
-  if (!book) {
+  if (loading) {
     return (
       <>
         <Navigation />
@@ -46,6 +64,23 @@ export default function BookDetailPage() {
       </>
     )
   }
+
+  if (fetchError || !book) {
+    return (
+      <>
+        <Navigation />
+        <div className="p-20 text-center space-y-4">
+          <p className="text-lg text-gray-600">{fetchError || 'Book not found'}</p>
+          <Link href="/library" className="inline-flex items-center gap-2 text-sm text-primary hover:underline">
+            <ArrowLeft size={16} /> Back to Library
+          </Link>
+        </div>
+      </>
+    )
+  }
+
+  const pdfDownloadUrl = book.pdf_url?.replace('/preview', '/export?format=pdf')
+  const pdfViewUrl = book.pdf_url?.replace('/preview', '/view')
 
   return (
     <>
@@ -68,7 +103,8 @@ export default function BookDetailPage() {
               {/* IMAGE */}
               <div className="flex justify-center items-center bg-gray-100 rounded-xl p-4">
                 <img
-                  src={book.cover_image_url}
+                  src={book.cover_image_url || '/placeholder.svg'}
+                  alt={book.title || 'Book cover'}
                   className="max-h-[400px] w-auto object-contain"
                 />
               </div>
@@ -89,19 +125,22 @@ export default function BookDetailPage() {
 
                   <button
                     onClick={() => setViewMode('read')}
-                    className="bg-primary text-white px-4 py-2 rounded"
+                    disabled={!book.pdf_url}
+                    className="bg-primary text-white px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Read Book
                   </button>
 
-                  <a
-                    href={book.pdf_url.replace('/preview', '/export?format=pdf')}
-                    target="_blank"
-                    className="border px-4 py-2 rounded flex items-center gap-2"
-                  >
-                    <Download size={16} />
-                    Download
-                  </a>
+                  {pdfDownloadUrl && (
+                    <a
+                      href={pdfDownloadUrl}
+                      target="_blank"
+                      className="border px-4 py-2 rounded flex items-center gap-2"
+                    >
+                      <Download size={16} />
+                      Download
+                    </a>
+                  )}
 
                 </div>
 
@@ -156,22 +195,26 @@ export default function BookDetailPage() {
               </button>
 
               {/* OPEN */}
-              <a
-                href={book.pdf_url.replace('/preview', '/view')}
-                target="_blank"
-                className="hover:bg-gray-700 px-2 py-1 rounded"
-              >
-                <ExternalLink size={16} />
-              </a>
+              {pdfViewUrl && (
+                <a
+                  href={pdfViewUrl}
+                  target="_blank"
+                  className="hover:bg-gray-700 px-2 py-1 rounded"
+                >
+                  <ExternalLink size={16} />
+                </a>
+              )}
 
               {/* DOWNLOAD */}
-              <a
-                href={book.pdf_url.replace('/preview', '/export?format=pdf')}
-                target="_blank"
-                className="hover:bg-gray-700 px-2 py-1 rounded"
-              >
-                <Download size={16} />
-              </a>
+              {pdfDownloadUrl && (
+                <a
+                  href={pdfDownloadUrl}
+                  target="_blank"
+                  className="hover:bg-gray-700 px-2 py-1 rounded"
+                >
+                  <Download size={16} />
+                </a>
+              )}
 
             </div>
 

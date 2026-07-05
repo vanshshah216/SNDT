@@ -10,7 +10,7 @@ interface Book {
   author?: string
   category?: string
   description?: string
-  thumbnail_url?: string
+  cover_image_url?: string
   pdf_url: string
 }
 
@@ -28,7 +28,7 @@ export function BooksManagement() {
     author: '',
     category: '',
     description: '',
-    thumbnail_url: '',
+    cover_image_url: '',
     pdf_url: ''
   })
 
@@ -91,7 +91,7 @@ export function BooksManagement() {
           author: formData.author?.trim() || null,
           category: formData.category?.trim() || null,
           description: formData.description?.trim() || null,
-          thumbnail_url: formData.thumbnail_url?.trim() || null,
+          cover_image_url: formData.cover_image_url?.trim() || null,
           pdf_url: formData.pdf_url.trim()
         }
 
@@ -114,7 +114,7 @@ export function BooksManagement() {
         author: '',
         category: '',
         description: '',
-        thumbnail_url: '',
+        cover_image_url: '',
         pdf_url: ''
       })
       setEditingId(null)
@@ -156,7 +156,7 @@ export function BooksManagement() {
       author: '',
       category: '',
       description: '',
-      thumbnail_url: '',
+      cover_image_url: '',
       pdf_url: ''
     })
     setEditingId(null)
@@ -229,12 +229,12 @@ export function BooksManagement() {
 
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
-                  Thumbnail URL
+                  Cover Image URL
                 </label>
                 <input
                   type="url"
-                  value={formData.thumbnail_url || ''}
-                  onChange={(e) => setFormData({ ...formData, thumbnail_url: e.target.value })}
+                  value={formData.cover_image_url || ''}
+                  onChange={(e) => setFormData({ ...formData, cover_image_url: e.target.value })}
                   className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
                   placeholder="https://example.com/cover.jpg"
                 />
