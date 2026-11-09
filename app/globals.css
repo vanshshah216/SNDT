@@ -3,6 +3,18 @@
 @tailwind utilities;
 
 @layer base {
+  body {
+    @apply text-[15px] leading-relaxed text-foreground;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight;
+  }
+
   :root {
     --background: 30 100% 97%;
     --foreground: 345 100% 24%;

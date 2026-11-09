@@ -61,7 +61,7 @@ export default function AchievementDetailPage() {
       {/* Back */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 py-3">
-          <Link href="/achievements" className="inline-flex items-center gap-2 text-blue-600">
+          <Link href="/achievements" className="inline-flex items-center gap-2 text-primary hover:underline">
             <ArrowLeft size={16} />
             Back to Achievements
           </Link>
@@ -69,7 +69,7 @@ export default function AchievementDetailPage() {
       </div>
 
       {/* Hero */}
-      <div className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 border-b border-gray-200">
+      <div className="bg-gradient-to-br from-primary/5 via-white to-secondary/10 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 py-10">
           <div className="grid lg:grid-cols-3 gap-8">
 
@@ -103,7 +103,7 @@ export default function AchievementDetailPage() {
               <div className="bg-white rounded-lg p-5 border shadow-sm space-y-4">
 
                 <div>
-                  <div className="bg-blue-100 text-blue-700 px-2 py-1 text-xs rounded inline-block mb-2">
+                  <div className="bg-secondary/20 text-primary px-2 py-1 text-xs rounded inline-block mb-2">
                     {achievement.category}
                   </div>
 
@@ -131,7 +131,7 @@ export default function AchievementDetailPage() {
                 {/* SKILLS */}
                 <div className="flex flex-wrap gap-2">
                   {skills.map((s) => (
-                    <span key={s} className="bg-blue-100 px-2 py-1 text-xs rounded">
+                    <span key={s} className="bg-secondary/20 text-primary px-2 py-1 text-xs rounded">
                       {s}
                     </span>
                   ))}
@@ -156,7 +156,7 @@ export default function AchievementDetailPage() {
             </p>
           </div>
 
-          <div className="bg-blue-50 p-5 border rounded">
+          <div className="bg-secondary/10 p-5 border rounded">
             <div className="flex gap-2 mb-2">
               <BookOpen size={20} />
               <h2 className="font-bold">Impact & Recognition</h2>
@@ -180,7 +180,7 @@ export default function AchievementDetailPage() {
 
           <Link
             href="/achievements"
-            className="block mt-4 bg-blue-600 text-white text-center py-2 rounded"
+            className="block mt-4 bg-primary text-white text-center py-2 rounded hover:bg-primary/90 transition"
           >
             View All Achievements
           </Link>

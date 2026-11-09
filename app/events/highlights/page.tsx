@@ -46,14 +46,14 @@ export default function EventHighlightsPage() {
       <Navigation />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-900 text-white py-16">
+      <section className="bg-gradient-to-br from-primary via-primary to-primary text-white py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <Link href="/events" className="inline-flex items-center gap-2 text-emerald-100 hover:text-white transition mb-6">
+          <Link href="/events" className="inline-flex items-center gap-2 text-white/80 hover:text-white transition mb-6">
             <ArrowLeft size={20} />
             Back to Events
           </Link>
           <h1 className="text-5xl md:text-6xl font-bold mb-4">Event Highlights</h1>
-          <p className="text-lg md:text-xl text-emerald-100">Relive the magic of our past events through videos and photos</p>
+          <p className="text-lg md:text-xl text-white/80">Relive the magic of our past events through videos and photos</p>
         </div>
       </section>
 
@@ -96,12 +96,12 @@ export default function EventHighlightsPage() {
                     {/* Play Icon Overlay */}
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
                       <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition">
-                        <Play size={28} className="text-emerald-600 fill-emerald-600" />
+                        <Play size={28} className="text-primary fill-primary" />
                       </div>
                     </div>
 
                     {/* Badge */}
-                    <div className="absolute top-4 right-4 px-3 py-1 bg-emerald-600 text-white rounded-full text-xs font-semibold">
+                    <div className="absolute top-4 right-4 px-3 py-1 bg-primary text-white rounded-full text-xs font-semibold">
                       Highlights
                     </div>
                   </div>
@@ -121,11 +121,11 @@ export default function EventHighlightsPage() {
                     {/* Details */}
                     <div className="space-y-2 mb-4 pb-4 border-b border-slate-200">
                       <div className="flex items-center gap-2 text-sm">
-                        <Calendar size={16} className="text-emerald-600 flex-shrink-0" />
+                        <Calendar size={16} className="text-primary flex-shrink-0" />
                         <span className="text-slate-700 font-medium">{event.date}</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
-                        <MapPin size={16} className="text-emerald-600 flex-shrink-0" />
+                        <MapPin size={16} className="text-primary flex-shrink-0" />
                         <span className="text-slate-700 font-medium">{event.location}</span>
                       </div>
                     </div>
@@ -157,7 +157,7 @@ export default function EventHighlightsPage() {
               <Calendar className="w-16 h-16 text-slate-300 mx-auto mb-4" />
               <h3 className="text-2xl font-bold text-slate-900 mb-2">No Event Highlights Yet</h3>
               <p className="text-slate-600 mb-6">Highlights from completed events will appear here</p>
-              <Link href="/events" className="inline-block px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition">
+              <Link href="/events" className="inline-block px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary transition">
                 Back to Events
               </Link>
             </div>

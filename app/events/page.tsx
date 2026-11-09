@@ -141,7 +141,7 @@ export default function EventsPage() {
   if (!mounted) return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
         <p className="text-slate-600">Loading events...</p>
       </div>
     </div>
@@ -155,7 +155,7 @@ export default function EventsPage() {
       <section className="relative bg-gradient-to-br from-red-900 via-red-800 to-red-700 text-white py-10 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-0 right-0 w-96 h-96 bg-pink-500 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-secondary rounded-full blur-3xl"></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 relative z-10">
@@ -609,14 +609,14 @@ export default function EventsPage() {
                 <div className="mb-6 pb-6 border-b border-slate-200">
                   <div className="space-y-3">
                     <div className="flex items-start gap-3">
-                      <Calendar size={18} className="text-emerald-600 flex-shrink-0 mt-0.5" />
+                      <Calendar size={18} className="text-primary flex-shrink-0 mt-0.5" />
                       <div>
                         <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">Date</p>
                         <p className="text-slate-900 font-semibold">{selectedEvent.date}</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <MapPin size={18} className="text-emerald-600 flex-shrink-0 mt-0.5" />
+                      <MapPin size={18} className="text-primary flex-shrink-0 mt-0.5" />
                       <div>
                         <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">Location</p>
                         <p className="text-slate-900 font-semibold text-sm">{selectedEvent.location}</p>
@@ -652,7 +652,7 @@ export default function EventsPage() {
                               videoElement.pause()
                             }
                           }}
-                          className="relative w-full aspect-square rounded-lg overflow-hidden border-2 border-slate-300 hover:border-emerald-500 hover:shadow-lg transition-all hover:scale-110 cursor-pointer group"
+                          className="relative w-full aspect-square rounded-lg overflow-hidden border-2 border-slate-300 hover:border-primary hover:shadow-lg transition-all hover:scale-110 cursor-pointer group"
                           title="Click to view full image"
                         >
                           <img src={img} alt={`Gallery ${idx}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-125 transition-transform duration-300" />
