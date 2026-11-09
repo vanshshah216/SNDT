@@ -12,9 +12,10 @@ export default function UpcomingEventsPage() {
   const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null)
 
   useEffect(() => {
-    const allEvents = DataStore.getEvents()
-    setEvents(allEvents.filter(e => e.category === 'upcoming'))
-    setMounted(true)
+    DataStore.getEvents().then((allEvents) => {
+      setEvents(allEvents.filter(e => e.category === 'upcoming'))
+      setMounted(true)
+    })
   }, [])
 
   if (!mounted) return <div className="min-h-screen flex items-center justify-center">Loading...</div>

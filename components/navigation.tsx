@@ -3,26 +3,9 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const router = useRouter()
-  
-  // Only initialize Supabase if env vars are available
-  let supabase: any = null
-  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    supabase = createClient()
-  }
-
-  const handleLogout = async () => {
-    if (supabase) {
-      await supabase.auth.signOut()
-    }
-    router.push('/')
-  }
 
   const navLinks = [
     { label: 'Home', href: '/' },
@@ -61,14 +44,7 @@ export function Navigation() {
             ))}
           </div>
 
-          {/* Auth Buttons */}
           <div className="flex items-center gap-2">
-            <Link
-              href="/auth/login"
-              className="hidden sm:block px-4 py-2 text-sm font-semibold text-primary bg-secondary hover:bg-yellow-400 rounded-md transition-all shadow-md hover:shadow-lg border border-yellow-300"
-            >
-              Admin Login
-            </Link>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="md:hidden p-2 hover:bg-primary-foreground hover:bg-opacity-10 rounded-md text-white"
@@ -91,13 +67,6 @@ export function Navigation() {
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/auth/login"
-              className="block mx-4 mt-2 px-4 py-2 text-sm font-semibold text-primary bg-secondary hover:bg-yellow-400 rounded-md transition-all shadow-md border border-yellow-300 text-center"
-              onClick={() => setIsOpen(false)}
-            >
-              Admin Login
-            </Link>
           </div>
         )}
       </div>

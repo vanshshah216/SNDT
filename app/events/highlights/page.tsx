@@ -4,36 +4,37 @@ import { Navigation } from '@/components/navigation'
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 import { Calendar, MapPin, X, ArrowLeft, Play } from 'lucide-react'
-import { DataStore } from '@/lib/dataStore'
+import { DataStore, EventType } from '@/lib/dataStore'
 
 export default function EventHighlightsPage() {
-  const [events, setEvents] = useState([])
+  const [events, setEvents] = useState<EventType[]>([])
   const [mounted, setMounted] = useState(false)
-  const [selectedEvent, setSelectedEvent] = useState(null)
-  const [videoPlaying, setVideoPlaying] = useState(null)
-  const videoRefs = useRef({})
-  const hoverRefs = useRef({})
+  const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null)
+  const [videoPlaying, setVideoPlaying] = useState<string | null>(null)
+  const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({})
+  const hoverRefs = useRef<Record<string, HTMLVideoElement | null>>({})
 
   useEffect(() => {
-    const allEvents = DataStore.getEvents()
-    setEvents(allEvents.filter(e => e.category === 'completed'))
-    setMounted(true)
+    DataStore.getEvents().then((allEvents) => {
+      setEvents(allEvents.filter(e => e.category === 'completed'))
+      setMounted(true)
+    })
   }, [])
 
-  const handleMouseEnter = (eventId) => {
+  const handleMouseEnter = (eventId: string) => {
     if (hoverRefs.current[eventId]) {
-      hoverRefs.current[eventId].play()
+      hoverRefs.current[eventId]!.play()
     }
   }
 
-  const handleMouseLeave = (eventId) => {
+  const handleMouseLeave = (eventId: string) => {
     if (hoverRefs.current[eventId]) {
-      hoverRefs.current[eventId].pause()
-      hoverRefs.current[eventId].currentTime = 0
+      hoverRefs.current[eventId]!.pause()
+      hoverRefs.current[eventId]!.currentTime = 0
     }
   }
 
-  const handleEventClick = (event) => {
+  const handleEventClick = (event: EventType) => {
     setSelectedEvent(event)
     setVideoPlaying(event.id)
   }
@@ -83,7 +84,7 @@ export default function EventHighlightsPage() {
                     {/* Hover Video */}
                     {event.hoverVideo && (
                       <video
-                        ref={el => hoverRefs.current[event.id] = el}
+                        ref={el => { hoverRefs.current[event.id] = el }}
                         src={event.hoverVideo}
                         className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         muted

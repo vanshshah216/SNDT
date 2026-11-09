@@ -551,8 +551,8 @@ console.log("HIGHLIGHTS FROM DB:", highlights)
             </div>
 
             <button
-              onClick={() => setGalleryImageIndex(Math.min(selectedEvent.gallery.length - 1, galleryImageIndex + 1))}
-              disabled={galleryImageIndex === selectedEvent.gallery.length - 1}
+              onClick={() => setGalleryImageIndex(Math.min((selectedEvent.gallery?.length ?? 1) - 1, galleryImageIndex + 1))}
+              disabled={galleryImageIndex === (selectedEvent.gallery?.length ?? 1) - 1}
               className="p-2 bg-white/10 hover:bg-white/20 disabled:opacity-40 rounded-lg transition text-white"
             >
               <ChevronRight size={20} />

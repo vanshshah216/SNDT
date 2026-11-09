@@ -21,6 +21,7 @@ export interface EventType {
   invitationCard?: string
   gallery?: string[]
   videoUrl?: string
+  hoverVideo?: string
 }
 
 export interface AchievementType {
@@ -167,33 +168,44 @@ export const DataStore = {
     return data || []
   },
 
-  getBooks: async (): Promise<BookType[]> => {
-    const { data, error } = await supabase
-      .from("books")
-      .select("*")
-      .order("title")
-
-    if (error) return []
-
-    return data || []
-  },
-
   getBooksPage: async (
     page: number,
-    pageSize: number = 12,
+    pageSize: number = 24,
+    filters: { category?: string | null; search?: string } = {},
   ): Promise<{ books: BookType[]; total: number }> => {
     const from = (page - 1) * pageSize
     const to = from + pageSize - 1
 
-    const { data, error, count } = await supabase
+    let query = supabase
       .from("books")
-      .select("*", { count: "exact" })
-      .order("title")
-      .range(from, to)
+      .select("id, title, author, category, description, cover_image_url, pdf_url", { count: "exact" })
+
+    if (filters.category) {
+      query = query.eq("category", filters.category)
+    }
+
+    if (filters.search && filters.search.trim()) {
+      const term = filters.search.trim().replace(/[%_]/g, "\\$&")
+      query = query.or(`title.ilike.%${term}%,author.ilike.%${term}%`)
+    }
+
+    const { data, error, count } = await query.order("title").range(from, to)
 
     if (error) return { books: [], total: 0 }
 
     return { books: data || [], total: count || 0 }
+  },
+
+  // Lightweight: fetches only the category column instead of full rows.
+  getBookCategories: async (): Promise<string[]> => {
+    const { data, error } = await supabase
+      .from("books")
+      .select("category")
+      .not("category", "is", null)
+
+    if (error) return []
+
+    return Array.from(new Set((data || []).map((row: any) => row.category).filter(Boolean))) as string[]
   },
 
   /* ---------- SYLLABUS ---------- */
@@ -263,16 +275,13 @@ export const DataStore = {
 
 export const useDataStore = () => {
 
-  const [books, setBooks] = useState<BookType[]>([])
   const [syllabus, setSyllabus] = useState<ProgramType[]>([])
 
   useEffect(() => {
-    DataStore.getBooks().then(setBooks)
     DataStore.getSyllabus().then(setSyllabus)
   }, [])
 
   return {
-    books,
     syllabus
   }
 }
