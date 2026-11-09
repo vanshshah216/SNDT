@@ -78,6 +78,7 @@ export default function EventHighlightsPage() {
                     <img
                       src={event.image}
                       alt={event.title}
+                      loading="lazy"
                       className="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"
                     />
 
@@ -136,7 +137,7 @@ export default function EventHighlightsPage() {
                         <div className="flex gap-2 overflow-x-auto pb-2">
                           {event.gallery.slice(0, 3).map((image, idx) => (
                             <div key={idx} className="flex-shrink-0 h-12 w-12 rounded-lg overflow-hidden border border-slate-300">
-                              <img src={image} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
+                              <img src={image} alt={`Gallery ${idx}`} loading="lazy" className="w-full h-full object-cover" />
                             </div>
                           ))}
                           {event.gallery.length > 3 && (
@@ -239,6 +240,7 @@ export default function EventHighlightsPage() {
                           <img
                             src={image}
                             alt={`Gallery ${idx}`}
+                            loading="lazy"
                             className="w-full h-full object-cover group-hover:scale-105 transition"
                           />
                         </div>

@@ -26,6 +26,7 @@ function FacultyCard({ member }: { member: FacultyMember }) {
         <img
           src={member.image_url || '/faculty/default.jpg'}
           alt={member.name}
+          loading="lazy"
           className="w-full h-full rounded-full object-cover border-2 border-gray-200 group-hover:scale-105 transition"
         />
       </div>
@@ -80,8 +81,6 @@ export default function FacultyPage() {
       const { data, error } = await supabase
         .from('faculty')
         .select('*')
-
-      console.log('FACULTY RAW:', data)
 
       if (error) throw error
 

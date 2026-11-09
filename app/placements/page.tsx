@@ -29,8 +29,6 @@ export default function PlacementsPage() {
         .from('placements')
         .select('*')
 
-      console.log("PLACEMENTS:", data)
-
       if (error) throw error
 
       setPlacements(data || [])

@@ -19,7 +19,7 @@ interface Semester {
 
 export default function SyllabusPage() {
   const { syllabus } = useDataStore()
-  const program = syllabus.find((p: any) => p.id === 'ma')
+  const program = syllabus.find((p) => p.id === 'ma')
 
   const [activeSemester, setActiveSemester] = useState<string>('1st Semester')
 

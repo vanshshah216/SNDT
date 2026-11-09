@@ -12,12 +12,26 @@ import {
   ChevronRight
 } from 'lucide-react'
 
+interface FacultyRow {
+  id: string
+  name: string
+  designation?: string
+  department?: string
+  degree?: string
+  email?: string
+  bio?: string
+  image_url?: string
+  type?: string
+  start_year?: number
+  end_year?: number
+}
+
 export default function FacultyDetailPage() {
 
   const params = useParams()
   const supabase = createClient()
 
-  const [faculty, setFaculty] = useState<any>(null)
+  const [faculty, setFaculty] = useState<FacultyRow | null>(null)
   const [research, setResearch] = useState<string[]>([])
   const [awards, setAwards] = useState<string[]>([])
   const [courses, setCourses] = useState<string[]>([])
@@ -31,48 +45,22 @@ export default function FacultyDetailPage() {
 
   async function fetchAllData(id: string) {
     try {
-      // MAIN
-      const { data: f } = await supabase
-        .from('faculty')
-        .select('*')
-        .eq('id', id)
-        .single()
+      // All five queries only depend on `id`, not on each other's results,
+      // so they're run concurrently instead of as sequential round-trips.
+      const [facultyRes, researchRes, awardsRes, coursesRes, tagsRes] = await Promise.all([
+        supabase.from('faculty').select('*').eq('id', id).single(),
+        supabase.from('faculty_research').select('title').eq('faculty_id', id),
+        supabase.from('faculty_awards').select('title, year').eq('faculty_id', id),
+        supabase.from('faculty_courses').select('course_name').eq('faculty_id', id),
+        supabase.from('faculty_tags').select('tag').eq('faculty_id', id),
+      ])
 
-      if (!f) return
-      setFaculty(f)
-
-      // RESEARCH
-      const { data: r } = await supabase
-        .from('faculty_research')
-        .select('title')
-        .eq('faculty_id', id)
-
-      setResearch((r || []).map((x: any) => x.title))
-
-      // AWARDS
-      const { data: a } = await supabase
-        .from('faculty_awards')
-        .select('title, year')
-        .eq('faculty_id', id)
-
-      setAwards((a || []).map((x: any) => `${x.title} (${x.year})`))
-
-      // COURSES
-      const { data: c } = await supabase
-        .from('faculty_courses')
-        .select('course_name')
-        .eq('faculty_id', id)
-
-      setCourses((c || []).map((x: any) => x.course_name))
-
-      // TAGS
-      const { data: t } = await supabase
-        .from('faculty_tags')
-        .select('tag')
-        .eq('faculty_id', id)
-
-      setTags((t || []).map((x: any) => x.tag))
-
+      if (!facultyRes.data) return
+      setFaculty(facultyRes.data)
+      setResearch((researchRes.data || []).map((x: { title: string }) => x.title))
+      setAwards((awardsRes.data || []).map((x: { title: string; year: number }) => `${x.title} (${x.year})`))
+      setCourses((coursesRes.data || []).map((x: { course_name: string }) => x.course_name))
+      setTags((tagsRes.data || []).map((x: { tag: string }) => x.tag))
     } catch (err) {
       console.error(err)
     }

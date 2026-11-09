@@ -107,10 +107,6 @@ export default function EventsPage() {
       let upcoming = await DataStore.getUpcomingEvents()
       let highlights = await DataStore.getEventHighlights()
 
-      // Use dummy data if no real data exists
-     console.log("UPCOMING FROM DB:", upcoming)
-console.log("HIGHLIGHTS FROM DB:", highlights)
-
       setUpcomingEvents(upcoming)
       setHighlightedEvents(highlights)
       setMounted(true)
@@ -196,6 +192,7 @@ console.log("HIGHLIGHTS FROM DB:", highlights)
                       <img
                         src={event.invitationCard || event.image}
                         alt={event.title}
+                        loading="lazy"
                         className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
@@ -280,6 +277,7 @@ console.log("HIGHLIGHTS FROM DB:", highlights)
                         <img
                           src={event.image}
                           alt={event.title}
+                          loading="lazy"
                           className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
                         />
                       )}
@@ -545,7 +543,7 @@ console.log("HIGHLIGHTS FROM DB:", highlights)
                       : 'border-white/30 hover:border-white/60'
                   }`}
                 >
-                  <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
+                  <img src={img} alt={`Thumbnail ${idx}`} loading="lazy" className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
@@ -657,7 +655,7 @@ console.log("HIGHLIGHTS FROM DB:", highlights)
                           className="relative w-full aspect-square rounded-lg overflow-hidden border-2 border-slate-300 hover:border-emerald-500 hover:shadow-lg transition-all hover:scale-110 cursor-pointer group"
                           title="Click to view full image"
                         >
-                          <img src={img} alt={`Gallery ${idx}`} className="w-full h-full object-cover group-hover:scale-125 transition-transform duration-300" />
+                          <img src={img} alt={`Gallery ${idx}`} loading="lazy" className="w-full h-full object-cover group-hover:scale-125 transition-transform duration-300" />
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
                             <ImageIcon size={18} className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>

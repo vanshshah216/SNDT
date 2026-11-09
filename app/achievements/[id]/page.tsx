@@ -7,57 +7,49 @@ import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
+interface AchievementRow {
+  id: string
+  title: string
+  category?: string
+  student_name?: string
+  student_class?: string
+  date?: string
+  recognition?: string
+  image_url?: string
+  full_description?: string
+  impact?: string
+}
+
 export default function AchievementDetailPage() {
 
   const params = useParams()
   const supabase = createClient()
 
-  const [achievement, setAchievement] = useState<any>(null)
+  const [achievement, setAchievement] = useState<AchievementRow | null>(null)
   const [gallery, setGallery] = useState<string[]>([])
   const [skills, setSkills] = useState<string[]>([])
-  const [related, setRelated] = useState<any[]>([])
+  const [related, setRelated] = useState<AchievementRow[]>([])
 
   useEffect(() => {
     if (params?.id) fetchData(params.id as string)
   }, [params])
 
   async function fetchData(id: string) {
+    // These four queries only depend on `id`, not on each other's results,
+    // so they're run concurrently instead of as sequential round-trips.
+    const [mainRes, galleryRes, skillsRes, relatedRes] = await Promise.all([
+      supabase.from('achievements').select('*').eq('id', id).single(),
+      supabase.from('achievement_gallery').select('image_url').eq('achievement_id', id),
+      supabase.from('achievement_skills').select('skill').eq('achievement_id', id),
+      supabase.from('achievements').select('*').neq('id', id).limit(3),
+    ])
 
-    // MAIN
-    const { data: main } = await supabase
-      .from('achievements')
-      .select('*')
-      .eq('id', id)
-      .single()
+    if (!mainRes.data) return
 
-    if (!main) return
-
-    setAchievement(main)
-
-    // GALLERY
-    const { data: g } = await supabase
-      .from('achievement_gallery')
-      .select('image_url')
-      .eq('achievement_id', id)
-
-    setGallery((g || []).map((x: any) => x.image_url))
-
-    // SKILLS
-    const { data: s } = await supabase
-      .from('achievement_skills')
-      .select('skill')
-      .eq('achievement_id', id)
-
-    setSkills((s || []).map((x: any) => x.skill))
-
-    // RELATED
-    const { data: r } = await supabase
-      .from('achievements')
-      .select('*')
-      .neq('id', id)
-      .limit(3)
-
-    setRelated(r || [])
+    setAchievement(mainRes.data)
+    setGallery((galleryRes.data || []).map((x: { image_url: string }) => x.image_url))
+    setSkills((skillsRes.data || []).map((x: { skill: string }) => x.skill))
+    setRelated(relatedRes.data || [])
   }
 
   if (!achievement) return null
@@ -96,6 +88,8 @@ export default function AchievementDetailPage() {
                   <div key={idx} className="h-20 overflow-hidden rounded border">
                     <img
                       src={img}
+                      alt={`Gallery ${idx + 1}`}
+                      loading="lazy"
                       className="w-full h-full object-cover hover:scale-105 transition"
                     />
                   </div>
@@ -126,7 +120,7 @@ export default function AchievementDetailPage() {
 
                 <div className="flex gap-2 text-sm">
                   <Calendar size={16} />
-                  {new Date(achievement.date).toDateString()}
+                  {achievement.date ? new Date(achievement.date).toDateString() : ''}
                 </div>
 
                 <div className="flex gap-2 text-sm">
@@ -199,7 +193,7 @@ export default function AchievementDetailPage() {
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-4">
           {related.map((item) => (
             <Link key={item.id} href={`/achievements/${item.id}`}>
-              <img src={item.image_url} className="h-32 w-full object-cover rounded" />
+              <img src={item.image_url} alt={item.title} loading="lazy" className="h-32 w-full object-cover rounded" />
               <p className="text-sm font-bold mt-1">{item.title}</p>
             </Link>
           ))}
