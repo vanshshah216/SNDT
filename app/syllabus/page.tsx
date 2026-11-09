@@ -74,14 +74,14 @@ export default function SyllabusPage() {
 
             {/* TABLE */}
             <div className="overflow-x-auto">
-              <table className="w-full text-base">
+              <table className="w-full text-base table-fixed sm:table-auto">
 
                 <thead className="bg-primary/10">
                   <tr className="text-left">
-                    <th className="p-4 font-semibold">Code</th>
-                    <th className="p-4 font-semibold">Course Name</th>
-                    <th className="p-4 font-semibold">Type</th>
-                    <th className="p-4 font-semibold text-center">Credits</th>
+                    <th className="hidden sm:table-cell p-2 sm:p-4 font-semibold">Code</th>
+                    <th className="p-2 sm:p-4 font-semibold">Course Name</th>
+                    <th className="p-2 sm:p-4 font-semibold">Type</th>
+                    <th className="p-2 sm:p-4 font-semibold text-center w-16 sm:w-auto">Credits</th>
                   </tr>
                 </thead>
 
@@ -93,19 +93,19 @@ export default function SyllabusPage() {
                         key={sub.code}
                         className="border-t bg-card hover:bg-muted/40 transition"
                       >
-                        <td className="p-4 font-mono text-sm text-muted-foreground">
+                        <td className="hidden sm:table-cell p-2 sm:p-4 font-mono text-sm text-muted-foreground">
                           {sub.code}
                         </td>
 
-                        <td className="p-4 font-medium text-base">
+                        <td className="p-2 sm:p-4 font-medium text-sm sm:text-base break-words">
                           {sub.name}
                         </td>
 
-                        <td className="p-4 text-base text-foreground/80">
+                        <td className="p-2 sm:p-4 text-sm sm:text-base text-foreground/80 break-words">
                           {sub.type}
                         </td>
 
-                        <td className="p-4 text-center font-semibold text-base">
+                        <td className="p-2 sm:p-4 text-center font-semibold text-sm sm:text-base">
                           {sub.credits}
                         </td>
                       </tr>
